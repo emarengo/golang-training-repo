@@ -3,8 +3,8 @@ package employee
 type Position int
 
 const (
-	Cx
+	Undefined Position = iota
+	CxAgent
 	Senior
-	Assistant
-	Analyst
+	Supervisor
 )
