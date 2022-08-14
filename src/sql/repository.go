@@ -56,17 +56,20 @@ func (r *Database) InsertEmployee(c context.Context, e *employee.Employee) error
 	return nil
 }
 
-func (r *Database) HandleEmployees(c context.Context, pos employee.Position) ([]employee.Employee, error) {
+func (r *Database) HandleEmployeeByPosition(c context.Context, position employee.Position) ([]employee.Employee, error) {
 	res := make([]employee.Employee, 0)
 
 	connectionString, err := r.ConnectionString()
 
 	db, err := sql.Open("mysql", connectionString)
+	if err != nil {
+		return nil, err
+	}
 
 	defer db.Close()
 
 	rows, err := db.Query(
-		"SELECT * FROM employee e WHERE e.`position`=?")
+		"SELECT * FROM employee e WHERE e.`position`=?", position)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +93,7 @@ func (r *Database) HandleEmployees(c context.Context, pos employee.Position) ([]
 	return res, nil
 }
 
-func (r *Database) HandleEmployee(c context.Context, id int) (*employee.Employee, error) {
+func (r *Database) HandleEmployeeById(c context.Context, id int) (*employee.Employee, error) {
 	var res *employee.Employee
 
 	connectionString, err := r.ConnectionString()
@@ -120,11 +123,6 @@ func (r *Database) HandleEmployee(c context.Context, id int) (*employee.Employee
 			return nil, err
 		}
 		res = nextEmployee
-	}
-
-	err = rows.Err()
-	if err != nil {
-		return nil, err
 	}
 
 	return res, nil
