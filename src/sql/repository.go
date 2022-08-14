@@ -29,7 +29,7 @@ func (r *Database) ConnectionString() (string, error) {
 	return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?parseTime=true", r.username, r.password, r.host, r.port, r.dbName), nil
 }
 
-func (r *Database) InsertEmployee(ctx context.Context, e *employee.Employee) error {
+func (r *Database) InsertEmployee(c context.Context, e *employee.Employee) error {
 	connectionString, err := r.ConnectionString()
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func (r *Database) InsertEmployee(ctx context.Context, e *employee.Employee) err
 	return nil
 }
 
-func (r *Database) HandleEmployees(ctx context.Context, pos employee.Position) ([]employee.Employee, error) {
+func (r *Database) HandleEmployees(c context.Context, pos employee.Position) ([]employee.Employee, error) {
 	res := make([]employee.Employee, 0)
 
 	connectionString, err := r.ConnectionString()
@@ -90,7 +90,7 @@ func (r *Database) HandleEmployees(ctx context.Context, pos employee.Position) (
 	return res, nil
 }
 
-func (r *Database) HandleEmployee(ctx context.Context, id int) (*employee.Employee, error) {
+func (r *Database) HandleEmployee(c context.Context, id int) (*employee.Employee, error) {
 	var res *employee.Employee
 
 	connectionString, err := r.ConnectionString()
